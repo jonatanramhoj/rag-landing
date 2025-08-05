@@ -31,7 +31,7 @@ const LandingPage = () => {
       {/* Left Column */}
       <div className="flex-1 bg-white flex items-center justify-center px-8 py-16 lg:py-24">
         <div className="max-w-lg w-full">
-          <p className="text-sm lg:text-base text-neutral-500 mb-2 uppercase tracking-wide font-medium">
+          <p className="text-sm lg:text-base text-purple-700 mb-2 uppercase tracking-wide font-medium">
             crash course
           </p>
 
@@ -39,7 +39,7 @@ const LandingPage = () => {
             Learn how to build a RAG Chat Bot Agent
           </h1>
 
-          <p className="text-xl lg:text-2xl text-neutral-500 mb-8 leading-relaxed">
+          <p className="text-xl lg:text-2xl text-purple-700 mb-8 leading-relaxed">
             Get hands-on with Genkit and launch your first RAG app fast.
           </p>
 

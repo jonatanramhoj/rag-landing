@@ -1,41 +1,46 @@
 "use client";
 import { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import Loader from "@/components/loader";
 import Image from "next/image";
 
-const LandingPage = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-  });
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Here you would typically send the data to your backend
-    alert(
-      `Thank you ${formData.name}! We'll send course updates to ${formData.email}`
-    );
-    setFormData({
-      name: "",
-      email: "",
+type Inputs = {
+  name: string;
+  email: string;
+};
+
+export default function LandingPage() {
+  const { register, handleSubmit, reset } = useForm<Inputs>();
+
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState<Inputs | null>(null);
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setLoading(true);
+
+    const response = await fetch("/api/newsletter", {
+      body: JSON.stringify(data),
+      method: "POST",
     });
+
+    if (response.ok) {
+      setSubmitted(data);
+      reset();
+    }
+
+    setLoading(false);
   };
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left Column */}
       <div className="flex-1 bg-white flex items-center justify-center px-8 py-16 lg:py-24">
         <div className="max-w-lg w-full">
-          <p className="text-sm lg:text-base text-purple-700 mb-2 uppercase tracking-wide font-medium">
+          <p className="text-sm lg:text-base text-purple-700 mb-2 uppercase tracking-wide font-medium relative before:content-[''] before:h-0.5 before:w-6 before:bg-purple-700 before:absolute before:top-2 before:-left-14">
             crash course
           </p>
 
-          <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-neutral-900 mb-6 leading-none">
+          <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-neutral-900 mb-6 leading-tight md:leading-none">
             Learn how to build a RAG Chat Bot Agent
           </h1>
 
@@ -47,7 +52,7 @@ const LandingPage = () => {
             Here is what you{"'"}ll learn:
           </h2>
 
-          <ul className="space-y-4 text-lg text-neutral-900 mb-8 list-disc list-inside">
+          <ul className="space-y-4 md:text-lg text-neutral-900 mb-8 list-disc list-inside">
             <li>RAG use cases and why demand is exploding</li>
             <li>How to set up Genkit, Gemini, and Next.js from scratch</li>
             <li>How to build a custom chat UI with React and Tailwind</li>
@@ -97,37 +102,48 @@ const LandingPage = () => {
           </p>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4 flex flex-col">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4 flex flex-col"
+          >
             <input
               type="text"
-              name="name"
               placeholder="Your name"
-              value={formData.name}
-              onChange={handleInputChange}
+              {...register("name")}
               required
-              className="p-2 rounded-md bg-white/95 border border-white/30 text-neutral-900 placeholder:text-neutral-900/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+              className="py-2 px-4 rounded-md bg-white/95 border border-white/30 text-neutral-900 placeholder:text-neutral-900/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
             />
 
             <input
               type="email"
-              name="email"
               placeholder="Your email"
-              value={formData.email}
-              onChange={handleInputChange}
+              {...register("email")}
               required
-              className="p-2 rounded-md bg-white/95 border border-white/30 text-neutral-900 placeholder:text-neutral-900/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+              className="py-2 px-4 rounded-md bg-white/95 border border-white/30 text-neutral-900 placeholder:text-neutral-900/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
             />
 
             <button
               type="submit"
-              className="rounded-md w-full bg-amber-400 text-black hover:bg-amber-300 font-semibold py-3 text-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              className="min-h-[52px] rounded-md w-full bg-amber-400 text-black hover:bg-amber-300 font-semibold py-3 text-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              disabled={loading}
             >
-              Signup now
+              {loading ? (
+                <Loader />
+              ) : submitted ? (
+                "You're in!"
+              ) : (
+                "Join Waitlist"
+              )}
             </button>
           </form>
+          {submitted && (
+            <div className="mt-4 p-4 rounded bg-green-100 text-green-800 font-medium">
+              Thanks, {submitted.name}! We&apos;ll send course updates to{" "}
+              {submitted.email}.
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
-};
-export default LandingPage;
+}

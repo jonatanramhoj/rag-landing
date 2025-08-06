@@ -9,6 +9,15 @@ type Inputs = {
   email: string;
 };
 
+const learnings = [
+  "RAG use cases and why demand is exploding",
+  "How to set up Genkit, Gemini, and Next.js from scratch",
+  "How to build a custom chat UI with React and Tailwind",
+  "How to embed your own data and store it in Firestore",
+  "How to build and deploy a full RAG flow using Genkit",
+  "How to secure, ship, and monitor your RAG agent in production",
+];
+
 export default function LandingPage() {
   const { register, handleSubmit, reset } = useForm<Inputs>();
 
@@ -52,17 +61,13 @@ export default function LandingPage() {
             Here is what you{"'"}ll learn:
           </h2>
 
-          <ul className="space-y-4 md:text-lg text-neutral-900 mb-8 list-disc list-inside">
-            <li>RAG use cases and why demand is exploding</li>
-            <li>How to set up Genkit, Gemini, and Next.js from scratch</li>
-            <li>How to build a custom chat UI with React and Tailwind</li>
-            <li>How to embed your own data and store it in Firestore</li>
-            <li>How to build and deploy a full RAG flow using Genkit</li>
-            <li>
-              How to secure, ship, and monitor your RAG agent in production
-            </li>
+          <ul className="space-y-4 text-md md:text-lg text-neutral-900 mb-8 list-disc list-inside">
+            {learnings.map((learning) => (
+              <li className="mb-2 md:mb-4" key={learning}>
+                {learning}
+              </li>
+            ))}
           </ul>
-
           <p className="text-xl font-semibold text-neutral-900">
             Signup now and get ahead of the curve in modern AI engineering!
           </p>

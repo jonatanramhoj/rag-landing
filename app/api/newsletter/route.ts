@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     const { data } = await resend.emails.send({
       from: "Jonatan Ramhöj <hello@jonatanramhoj.com>", // needs to be the same as the domain in resend
       to: email,
-      subject: "Welcome to the RAG Agent Crash Course Beta",
+      subject: "Thanks for Joining the RAG Crash Course BETA",
       react: WelcomeTemplate({ name }),
     });
 

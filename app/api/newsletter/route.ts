@@ -9,17 +9,14 @@ export async function POST(req: Request) {
   try {
     const betaUser = await req.json();
     const { name, email } = betaUser;
-    console.log("betaUser", betaUser);
-
     // save user to beta users collection in firestore
     await saveBetaUser(betaUser);
 
     // send welcome email
     const { data } = await resend.emails.send({
-      from: "hello@jonatanr.ai",
+      from: "Jonatan Ramhöj <hello@jonatanramhoj.com>", // needs to be the same as the domain in resend
       to: email,
-      subject:
-        "Welcome to the RAG Agent Crash Course Beta — Let’s Get Started!",
+      subject: "Welcome to the RAG Agent Crash Course Beta",
       react: WelcomeTemplate({ name }),
     });
 

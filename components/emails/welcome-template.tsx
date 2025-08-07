@@ -67,11 +67,6 @@ export default function WelcomeTemplate({ name }: { name: string }) {
           2023; fundamentals still hold up).
         </p>
 
-        {/* <p>
-          Best,
-          <br />
-          Jonatan
-        </p> */}
         <p className="mb-4">
           Expect a few more of these before launch. I’ll keep them as
           informative and useful as possible. Happy coding until next time!
